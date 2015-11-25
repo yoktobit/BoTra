@@ -1,0 +1,147 @@
+﻿<Window x:Class="BoTra.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BoTra"
+        mc:Ignorable="d"
+        Icon="botra.ico"
+        Title="BodyTracker" Height="600" Width="1000" Closing="Window_Closing" x:Name="MyMainWindow">
+    <Window.Resources>
+        <local:DateConverter x:Key="dateConverter"/>
+        <BooleanToVisibilityConverter x:Key="b2v"/>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Width="Auto">
+            <MenuItem Header="_Datei">
+                <MenuItem x:Name="mnuSettings" Header="_Einstellungen" Click="mnuSettings_Click"/>
+                <MenuItem Header="_Beenden"/>
+            </MenuItem>
+            <MenuItem Header="_Ansicht" x:Name="mnuAnsicht">
+                <MenuItem Header="_Farbmarkierung"/>
+                <MenuItem Header="_Spalten">
+                    <MenuItem x:Name="chkGewichtVisible" IsCheckable="True" IsChecked="{Binding GewichtVisible}" Header="Gewicht"></MenuItem>
+                    <MenuItem x:Name="chkBizepsLockerVisible" IsCheckable="True" IsChecked="{Binding BizepsLockerVisible}" Header="Bizeps Locker"></MenuItem>
+                    <MenuItem x:Name="chkBizepsAngespanntVisible" IsCheckable="True" IsChecked="{Binding BizepsAngespanntVisible}" Header="Bizeps Angespannt"></MenuItem>
+                    <MenuItem x:Name="chkHalsVisible" IsCheckable="True" IsChecked="{Binding HalsVisible}" Header="Hals"></MenuItem>
+                    <MenuItem x:Name="chkSchulternVisible" IsCheckable="True" IsChecked="{Binding SchulternVisible}" Header="Schultern"></MenuItem>
+                    <MenuItem x:Name="chkBrustVisible" IsCheckable="True" IsChecked="{Binding BrustVisible}" Header="Brust"></MenuItem>
+                    <MenuItem x:Name="chkBauchVisible" IsCheckable="True" IsChecked="{Binding BauchVisible}" Header="Bauch"></MenuItem>
+                    <MenuItem x:Name="chkOberschenkelVisible" IsCheckable="True" IsChecked="{Binding OberschenkelVisible}" Header="Oberschenkel"></MenuItem>
+                    <MenuItem x:Name="chkWadeVisible" IsCheckable="True" IsChecked="{Binding WadeVisible}" Header="Wade"></MenuItem>
+                    <MenuItem x:Name="chkBonusVisible" IsCheckable="True" IsChecked="{Binding BonusVisible}" Header="Bonus"></MenuItem>
+                    <MenuItem x:Name="chkBMIVisible" IsCheckable="True" IsChecked="{Binding BMIVisible}" Header="BMI"></MenuItem>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Path=bodyList.Liste}" AutoGenerateColumns="False" Language="de-DE" AddingNewItem="dataGrid_AddingNewItem">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Datum" FontSize="16" Binding="{Binding Datum, Converter={StaticResource dateConverter}}" />
+                    <DataGridTextColumn Header="Kilo" FontSize="16" Binding="{Binding Gewicht, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkGewichtVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding GewichtBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Bizeps locker" FontSize="16" Binding="{Binding BizepsLocker, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkBizepsLockerVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding BizepsLockerBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Bizeps angespannt" FontSize="16" Binding="{Binding BizepsAngespannt, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkBizepsAngespanntVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding BizepsAngespanntBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <!--<DataGridTextColumn Header="Hals" Binding="{Binding Hals, StringFormat=#0.00}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding HalsBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>-->
+                    <DataGridTextColumn Header="Schultern" FontSize="16" Binding="{Binding Schultern, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkSchulternVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding SchulternBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Brust" FontSize="16" Binding="{Binding Brust, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkBrustVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding BrustBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Bauch" FontSize="16" Binding="{Binding Bauch, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkBauchVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding BauchBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Oberschenkel" FontSize="16" Binding="{Binding Oberschenkel, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkOberschenkelVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding OberschenkelBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Wade" FontSize="16" Binding="{Binding Wade, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkWadeVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding WadeBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Bonus" FontSize="16" Binding="{Binding Bonus, StringFormat=#0.00}" Visibility="{Binding Source={x:Reference chkBonusVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Background" Value="{Binding BonusBrush}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="BMI" FontSize="16" Binding="{Binding BMI, StringFormat=#0.00, Mode=OneWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Source={x:Reference chkBMIVisible}, Path=IsChecked, Converter={StaticResource b2v}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Punkte" FontSize="16" Binding="{Binding Punkte, StringFormat=#0.00}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
+</Window>
